@@ -1,0 +1,148 @@
+:root {
+    --primario: #191f7a;
+    --secundario: #3740c8;
+    --verde: #80e86f;
+    --background: #191a1c;
+}
+
+.panel {
+    margin-bottom: 30px;
+}
+
+.divFragmento {
+    background: linear-gradient(to right, var(--primario), var(--secundario));
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.seccionFragmento {
+    border-style: dashed;
+    border-width: 3px;
+    border-color: blue;
+}
+
+.aFragmento {
+    color: var(--verde);
+    margin-left:2rem;
+}
+
+.juegos {
+    padding: 0;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        display: block;
+    }
+}
+
+.game-content {
+    padding: 200px;
+}
+
+
+/* ===== Estilos que usan las plantillas de la práctica 9 ===== */
+:root {
+    --primary: var(--secundario);
+    --accent: var(--primario);
+    --success: var(--verde);
+    --text-muted: #9aa0a6;
+    --panel-bg: #23252b;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: #e8eaed;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: var(--panel-bg);
+}
+
+.nav-brand {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.grid .panel {
+    margin-bottom: 0;
+}
+
+.panel {
+    background: var(--panel-bg);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.text-gradient {
+    background: linear-gradient(to right, var(--success), var(--primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #3c4043;
+    border-radius: 6px;
+    background: var(--background);
+    color: inherit;
+    font-family: inherit;
+    font-size: 1rem;
+}

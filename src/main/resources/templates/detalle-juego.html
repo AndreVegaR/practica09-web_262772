@@ -1,0 +1,28 @@
+<th:block th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+
+
+    <title> th:text="${juego.titulo}"</title>
+
+
+
+    <main>
+        <h2 class="text-gradient" th:text="${juego.titulo}"></h2>
+
+        <div>
+            <!-- Portada -->
+            <div class="game-detail">
+                <img alt="portada juego" th:src="${#strings.startWith(juego.portadaUrl, 'http')} ? ${juego.portadaUrl} : @{/uploads/{img}(img=${juego.portadaUrl})}"/>
+            </div>
+
+            <!-- Datos -->
+            <div class="game-description">
+                <span th:text="${juego.precio}"></span>
+                <p th:text="${juego.precio}"></p>
+                <p th:text="${juego.descripcion}"></p>
+            </div>
+        </div>
+
+    </main>
+
+
+</th:block>
