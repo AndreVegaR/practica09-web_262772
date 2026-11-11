@@ -1,6 +1,6 @@
 package com.example.GameVault.repository;
 
-import com.example.GameVault.models.Juego;
+import com.example.GameVault.model.Juego;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +16,11 @@ public interface JuegoRepository extends JpaRepository<Juego,Long> {
     List<Juego> findByDescripcionContainingIgnoreCase(String descripcion);
 
     List<Juego> findByTituloStartingWithIgnoreCase(String titulo);
+
+    List<Juego> findByUsuarioId(Long usuario);
+
+    @Query("SELECT j FROM Juego j WHERE LOWER(j.titulo) LIKE LOWER(CONCAT('%', :filtro, '%')) OR LOWER(j.categoria) LIKE LOWER(CONCAT('%', :filtro, '%'))")
+    List<Juego> buscarPorTituloCategoria(@Param("filtro") String filtro);
 
     @Query("SELECT j FROM Juego j where j.precio <: precioComparacion and LOWER(j.titulo) LIKE CONCAT(:letra,'%')")
     List<Juego> buscarPrecioMenorAQueEmpiecePor(@Param("precioComparacion") Double precioComparacion, @Param("letra") String letra);

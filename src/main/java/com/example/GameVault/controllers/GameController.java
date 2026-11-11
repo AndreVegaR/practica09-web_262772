@@ -1,8 +1,10 @@
 package com.example.GameVault.controllers;
 
 import com.example.GameVault.dto.JuegoDTO;
-import com.example.GameVault.models.Juego;
-import com.example.GameVault.service.JuegoService;
+import com.example.GameVault.model.Juego;
+import com.example.GameVault.model.Usuario;
+import com.example.GameVault.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,11 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 public class GameController {
+    @Autowired
     private JuegoService juegoService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     /**
      * Retorna la página independiente para enseñar las notaciones de fragmentos
@@ -72,9 +78,21 @@ public class GameController {
     @PostMapping("/juegos")
     public String guardarJuego(@ModelAttribute JuegoDTO juegoDTO) {
         Juego nuevoJuego = crearJuego(juegoDTO);
+        nuevoJuego.setUsuario(usuarioService.obtenerUsuarioLogueado());
         juegoService.guardarJuego(nuevoJuego, juegoDTO.getPortada());
-        return "redirect:/juegos";
+        return "redirect:/mis-juegos";
     }
+
+
+
+    @GetMapping("/mis-juegos")
+    public String dashboard(Model model) {
+        Usuario usuarioLogueado = usuarioService.obtenerUsuarioLogueado();
+        model.addAttribute("juegos", juegoService.obtenerJuegosPorUsuario(usuarioLogueado.getId()));
+        model.addAttribute("usuario", usuarioLogueado);
+        return "mis-juegos";
+    }
+
 
 
 
@@ -89,12 +107,25 @@ public class GameController {
     @GetMapping("/juegos/editar/{id}")
     public String editarJuego(@PathVariable Long idJuego, Model model) {
         Juego juego = juegoService.obtenerJuegoPorId(idJuego);
-        String regreso = "juegos";
-        if (juego != null) {
+        if (juego != null && usuarioLogueado(juego.getUsuario())) {
             model.addAttribute("juego", juego);
-            regreso = "formulario";
+            return "formulario";
         }
-        return regreso;
+        return "redirect:/mis-juegos";
+    }
+
+
+
+    /**
+     * Auxiliar que centraliza la lógica de validar que el usuario
+     * que quiere interactuar con el sistema es el actualmente logueado
+     *
+     * @param usuario
+     *
+     * @return
+     */
+    private boolean usuarioLogueado(Usuario usuario) {
+        return usuario.getId().equals(usuarioService.obtenerUsuarioLogueado().getId());
     }
 
 
@@ -119,7 +150,7 @@ public class GameController {
             juegoExistente.setCategoria(juegoDTO.getCategoria());
             juegoService.guardarJuego(juegoExistente, juegoDTO.getPortada());
         }
-        return "redirect:/juegos";
+        return "redirect:/mis-juegos";
     }
 
 
@@ -134,10 +165,10 @@ public class GameController {
     @PostMapping("/juegos/eliminar/{id}")
     public String eliminarJuego(@PathVariable Long idJuego) {
         Juego juego = juegoService.obtenerJuegoPorId(idJuego);
-        if (juego != null) {
+        if (juego != null && usuarioLogueado(juego.getUsuario())) {
             juegoService.eliminarJuego(idJuego);
         }
-        return "redirect:/juegos";
+        return "redirect:/mis-juegos";
     }
 
 

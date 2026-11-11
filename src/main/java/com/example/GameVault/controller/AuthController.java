@@ -2,6 +2,7 @@ package com.example.GameVault.controller;
 
 import com.example.GameVault.model.Usuario;
 import com.example.GameVault.service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,15 +28,16 @@ public class AuthController {
     @PostMapping("/login")
     public String procesarLogin(@RequestParam("email") String email,
                                 @RequestParam("password") String password,
-                                Model model) {
+                                Model model,
+                                HttpSession sesion) {
 
         Usuario usuario = usuarioService.autenticarUsuario(email, password);
 
         if (usuario != null) {
             // Las credenciales son correctas, pero todavía no recordamos quién es:
             // en cuanto cambie de página, la aplicación lo olvida.
-            model.addAttribute("mensaje", "Bienvenido, " + usuario.getNombre());
-            return "login";
+            sesion.setAttribute("usuario_id", usuario.getId());
+            return "redirect:/mis-juegos";
         } else {
             model.addAttribute("error", "Credenciales inválidas. Inténtalo de nuevo.");
             return "login";
@@ -63,5 +65,20 @@ public class AuthController {
             model.addAttribute("error", "Ocurrió un error al registrar el usuario.");
             return "registro";
         }
+    }
+
+
+
+    /**
+     * Cierra la sesión
+     *
+     * @param sesion a cerrar
+     *
+     * @return
+     */
+    @GetMapping("/logout")
+    public String logout(HttpSession sesion) {
+        sesion.invalidate();
+        return "redirect:/";
     }
 }

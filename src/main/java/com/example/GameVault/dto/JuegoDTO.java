@@ -1,5 +1,6 @@
 package com.example.GameVault.dto;
 
+import com.example.GameVault.model.Usuario;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,4 +11,5 @@ public class JuegoDTO {
     private Double precio;
     private String categoria;
     private MultipartFile portada;
+    private Usuario usuario;
 }

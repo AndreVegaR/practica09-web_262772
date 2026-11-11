@@ -1,6 +1,6 @@
 package com.example.GameVault.service;
 
-import com.example.GameVault.models.Juego;
+import com.example.GameVault.model.Juego;
 import com.example.GameVault.repository.JuegoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class JuegoService {
     }
 
     /**
-     * FGGF
+     * Obtiene juego por ID
      *
      * @param id
      *
@@ -55,10 +55,7 @@ public class JuegoService {
      * @param portada
      */
     public void guardarJuego(Juego juego, MultipartFile portada){
-        String urlImagen = "default.png";
-
-        // Imagen por defecto si no suben nada
-        String nombreArchivo = "default.png";
+        String urlImagen = juego.getPortadaUrl() != null ? juego.getPortadaUrl() : "default.png";
 
         // Verificamos si el archivo no está vacío
         if (!portada.isEmpty()) {
@@ -70,8 +67,8 @@ public class JuegoService {
                 }
 
                 // Generamos un nombre único para evitar sobreescribir archivos con el mismo nombre
-                nombreArchivo = UUID.randomUUID().toString() + "_" + portada.getOriginalFilename();
-                Path filePath = uploadPath.resolve(nombreArchivo);
+                urlImagen = UUID.randomUUID().toString() + "_" + portada.getOriginalFilename();
+                Path filePath = uploadPath.resolve(urlImagen);
 
                 // Guardamos el archivo físicamente en disco
                 Files.copy(portada.getInputStream(), filePath);
@@ -94,5 +91,17 @@ public class JuegoService {
             return listarTodos();
         }
         return juegoRepository.findByTituloContainingIgnoreCase(palabra);
+    }
+
+
+    /**
+     *
+     *
+     * @param idUsuario
+     *
+     * @return
+     */
+    public List<Juego> obtenerJuegosPorUsuario(Long idUsuario) {
+        return juegoRepository.findByUsuarioId(idUsuario);
     }
 }
